@@ -3,9 +3,14 @@ function! g:Gministatus()
   top new
   setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
   silent execute '$read !git status -b --porcelain'
-  map <buffer> <silent> - :call GministatusStageFile()<CR>
-  map <buffer> <silent> r :call GministatusRefresh()<CR>
-  map <buffer> <silent> R :call GministatusRefresh()<CR>
+  map <buffer> <silent> -    :call GministatusStageFile()<CR>
+  map <buffer> <silent> r    :call GministatusRefresh()<CR>
+  map <buffer> <silent> R    :call GministatusRefresh()<CR>
+  map <buffer> <silent> t    :call GministatusOpenFile('tabnew')<CR>
+  map <buffer> <silent> s    :call GministatusOpenFile('split')<CR>
+  map <buffer> <silent> v    :call GministatusOpenFile('vsplit')<CR>
+  map <buffer> <silent> o    :call GministatusOpenFile('')<CR>
+  map <buffer> <silent> <CR> :call GministatusOpenFile('')<CR>
   execute 'resize ' . line('$')
   normal ggdd
   " silent file .git/index
@@ -21,6 +26,16 @@ function! GministatusRefresh()
   quit
   call g:Gministatus()
   execute 'normal '. line_nr . 'G03l'
+endfunction
+
+
+
+function! GministatusOpenFile(cmd)
+  let line=getline('.')
+  let file_path=split(line)[1]
+  wincmd w
+  execute a:cmd
+  execute 'edit '. file_path
 endfunction
 
 
