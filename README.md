@@ -5,7 +5,7 @@ A minimal replacement for fugitive's Gstatus command. Uses `git status --short` 
 
 
 ## What are the advantages over Gstatus?
-* **Space conscious**
+* **Space conscious** (See screenshots below)
   - Same information conveyed in fewer lines
   - Status window automatically resizes to fit its content
 * **More file shortcuts**
@@ -22,3 +22,8 @@ A minimal replacement for fugitive's Gstatus command. Uses `git status --short` 
 
 * **Installation with [Pathogen](https://github.com/tpope/vim-pathogen)**
   - `git clone git://github.com/alexdavid/vim-min-git-status.git ~/.vim/bundle`
+
+## Screenshots
+| **Gstatus**                 |**Gministatus**                       |
+|-----------------------------|--------------------------------------|
+| ![Gstatus](doc/Gstatus.png) | ![Gminisatatus](doc/Gministatus.png) |
