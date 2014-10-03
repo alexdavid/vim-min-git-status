@@ -9,7 +9,7 @@ function! g:Gministatus()
   execute 'resize ' . line('$')
   normal ggdd
   " silent file .git/index
-  execute "%sort /\\(^[^#]. \\)\\@<=.*/ r"
+  execute '%sort /\(^[^#]. \)\@<=.*/ r'
   setlocal nomodifiable
   call Syntax()
 endfunction
