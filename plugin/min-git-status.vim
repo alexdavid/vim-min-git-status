@@ -8,7 +8,7 @@ function! g:Gministatus()
   map <buffer> <silent> R :call GministatusRefresh()<CR>
   execute 'resize ' . line('$')
   normal ggdd
-  silent file git-status
+  silent file .git/index
   execute "%sort /\\(^[^#]. \\)\\@<=.*/ r"
   setlocal nomodifiable
   call Syntax()
@@ -29,8 +29,7 @@ function! GministatusStageFile()
   let line=split(getline('.'))
   let staged=line[0]
   let file_path=line[1]
-  execute 'silent !git add ' . file_path
-  redraw
+  execute 'silent !git add ' . file_path | redraw!
   call GministatusRefresh()
 endfunction
 
