@@ -1,96 +1,106 @@
 command! Gministatus :call g:Gministatus()
 function! g:Gministatus()
-  silent execute 'pedit ' . GetGitTopLevel() . '/.git/mini-status'
+  silent execute 'pedit ' . Get_git_top_level() . '/.git/mini-status'
   wincmd P
-  silent execute 'lcd ' . GetGitTopLevel()
+  silent execute 'lcd ' . Get_git_top_level()
   setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap modifiable
   silent execute '$read !git status -b --porcelain'
-  map <buffer> <silent> -    :call StageFile()<CR>
+  map <buffer> <silent> -    :call Stage_file()<CR>
   map <buffer> <silent> r    :call Refresh()<CR>
   map <buffer> <silent> R    :call Refresh()<CR>
-  map <buffer> <silent> t    :call OpenFile('tabnew')<CR>
-  map <buffer> <silent> s    :call OpenFile('split')<CR>
-  map <buffer> <silent> v    :call OpenFile('vsplit')<CR>
-  map <buffer> <silent> o    :call OpenFile('')<CR>
-  map <buffer> <silent> <CR> :call OpenFile('')<CR>
-  map <buffer>          .    : <C-R>=GetFilePath()<CR><Home>
+  map <buffer> <silent> t    :call Open_file('tabnew')<CR>
+  map <buffer> <silent> s    :call Open_file('split')<CR>
+  map <buffer> <silent> v    :call Open_file('vsplit')<CR>
+  map <buffer> <silent> o    :call Open_file('')<CR>
+  map <buffer> <silent> <CR> :call Open_file('')<CR>
+  map <buffer>          .    : <C-R>=Get_file_path()<CR><Home>
   execute 'resize ' . line('$')
   normal ggdd
   execute '%sort /\(^[^#]. \)\@<=.*/ r'
   setlocal nomodifiable
-  call Syntax()
+  call Set_syntax()
 endfunction
 
 
-
-function! GetGitTopLevel()
+function! Get_git_top_level()
   return substitute(system('git rev-parse --show-toplevel'), '\n', '', '')
 endfunction
 
 
-
 function! Refresh()
-  let line_nr=line('.')
+  let line_number=line('.')
   call g:Gministatus()
-  execute 'normal '. line_nr . 'G03l'
+  execute 'normal '. line_number . 'G03l'
 endfunction
 
 
-
-function! GetFilePath()
+function! Get_file_path()
   return split(getline('.'))[1]
 endfunction
 
 
-
-function! GetFile2Path()
+function! Get_file2_path()
   return split(getline('.'))[3]
 endfunction
 
 
-
-function! OpenFile(cmd)
-  let file_path = GetFilePath()
+function! Open_file(cmd)
+  let file_path = Get_file_path()
   wincmd w
   execute a:cmd
-  execute 'edit ' . GetGitTopLevel() . '/' . file_path
+  execute 'edit ' . Get_git_top_level() . '/' . file_path
 endfunction
 
 
-
-function! RunGitCommand(cmd)
-  call system('git -C ' . GetGitTopLevel() . ' ' . a:cmd)
+function! Run_git_command(cmd)
+  call system('git -C ' . Get_git_top_level() . ' ' . a:cmd)
 endfunction
 
 
+function! Stage_file()
+  let file_path = Get_file_path()
 
-function! StageFile()
-  let line = getline('.')
-  let file_path = GetFilePath()
-  if line =~ '^\(??\|[ MAR]M\)'
-    call RunGitCommand('add ' . file_path)
+  if Current_line_has_unstaged_modification()
+    call Run_git_command('add ' . file_path)
 
-  elseif line =~ '^[MADR] '
-    call RunGitCommand('reset -- ' . file_path)
-    if line =~ '^R '
-      call RunGitCommand('reset -- ' . GetFile2Path())
+  elseif Current_line_has_staged_changes()
+    call Run_git_command('reset -- ' . file_path)
+    if Current_line_has_staged_rename()
+      call Run_git_command('reset -- ' . Get_file2_path())
     endif
 
-  elseif line =~ '^[ MAR]D'
-    call RunGitCommand('rm ' . file_path)
+  elseif Current_line_has_unstaged_delete()
+    call Run_git_command('rm ' . file_path)
 
   else
     echo "Sorry, I don't know how to stage '" . file_path . "'"
     return
-
   endif
-
   call Refresh()
 endfunction
 
 
+function! Current_line_has_unstaged_modification()
+  return getline('.') =~ '^\(??\|[ MAR]M\)'
+endfunction
 
-function! Syntax()
+
+function! Current_line_has_unstaged_delete()
+  return getline('.') =~ '^[ MAR]D'
+endfunction
+
+
+function! Current_line_has_staged_changes()
+  return getline('.') =~ '^[MADR] '
+endfunction
+
+
+function! Current_line_has_staged_rename()
+  return getline('.') =~ '^R'
+endfunction
+
+
+function! Set_syntax()
   syn match GministatusLocalBranch /\(^## \)\@<=[^.]*/
   syn match GministatusRemoteBranch /\(^##.*\.\.\.\)\@<=.*/
   syn match GministatusStaged /^[MADRCU]/
