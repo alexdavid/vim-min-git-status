@@ -27,3 +27,14 @@ A minimal replacement for fugitive's Gstatus command. Uses `git status --short` 
 | **Gstatus**                 |**Gministatus**                       |
 |-----------------------------|--------------------------------------|
 | ![Gstatus](doc/Gstatus.png) | ![Gminisatatus](doc/Gministatus.png) |
+
+## Usage
+Open the status window with `:Gministatus`, then position cursor over files and run:
+* `-` to Stage/unstage files
+  - Note: If there are changes in the index *and* working tree this will stage the file
+* `.` to get the file path in vim's command line
+* `o` or `Enter` to open the file
+* `t` to open the file in a new tab
+* `v` to open the file in a new vertical split
+* `s` to open the file in a new horizontal split
+* `r` or `R` to refresh
