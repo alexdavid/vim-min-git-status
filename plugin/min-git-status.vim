@@ -1,7 +1,8 @@
 command! Gministatus :call g:Gministatus()
 function! g:Gministatus()
-  top new
-  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
+  silent pedit .git/ministatus
+  wincmd P
+  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap modifiable
   silent execute '$read !git status -b --porcelain'
   map <buffer> <silent> -    :call GministatusStageFile()<CR>
   map <buffer> <silent> r    :call GministatusRefresh()<CR>
@@ -14,7 +15,6 @@ function! g:Gministatus()
   map <buffer>          .    : <C-R>=GministatusGetFilePath()<CR><Home>
   execute 'resize ' . line('$')
   normal ggdd
-  " silent file .git/index
   execute '%sort /\(^[^#]. \)\@<=.*/ r'
   setlocal nomodifiable
   call Syntax()
@@ -24,7 +24,6 @@ endfunction
 
 function! GministatusRefresh()
   let line_nr=line('.')
-  quit
   call g:Gministatus()
   execute 'normal '. line_nr . 'G03l'
 endfunction
