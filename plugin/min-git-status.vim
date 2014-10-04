@@ -1,8 +1,8 @@
 command! Gministatus :call g:Gministatus()
 function! g:Gministatus()
-  silent pedit .git/ministatus
+  silent execute 'pedit ' . GministatusGetGitTopLevel() . '/.git/mini-status'
   wincmd P
-  execute 'lcd ' . system('git rev-parse --show-toplevel')
+  silent execute 'lcd ' . GministatusGetGitTopLevel()
   setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap modifiable
   silent execute '$read !git status -b --porcelain'
   map <buffer> <silent> -    :call GministatusStageFile()<CR>
@@ -19,6 +19,12 @@ function! g:Gministatus()
   execute '%sort /\(^[^#]. \)\@<=.*/ r'
   setlocal nomodifiable
   call Syntax()
+endfunction
+
+
+
+function! GministatusGetGitTopLevel()
+  return substitute(system('git rev-parse --show-toplevel'), '\n', '', '')
 endfunction
 
 
@@ -47,7 +53,7 @@ endfunction
 
 
 function! GministatusRunGitCommand(cmd)
-  call system('git ' . a:cmd)
+  call system('git -C ' . GministatusGetGitTopLevel() . ' ' . a:cmd)
 endfunction
 
 
