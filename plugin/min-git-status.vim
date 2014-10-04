@@ -5,20 +5,12 @@ function! g:Gministatus()
   silent execute 'lcd ' . Get_git_top_level()
   setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap modifiable
   silent execute '$read !git status -b --porcelain'
-  map <buffer> <silent> -    :call Stage_file()<CR>
-  map <buffer> <silent> r    :call Refresh()<CR>
-  map <buffer> <silent> R    :call Refresh()<CR>
-  map <buffer> <silent> t    :call Open_file('tabnew')<CR>
-  map <buffer> <silent> s    :call Open_file('split')<CR>
-  map <buffer> <silent> v    :call Open_file('vsplit')<CR>
-  map <buffer> <silent> o    :call Open_file('')<CR>
-  map <buffer> <silent> <CR> :call Open_file('')<CR>
-  map <buffer>          .    : <C-R>=Get_file_path()<CR><Home>
   execute 'resize ' . line('$')
   normal ggdd
   execute '%sort /\(^[^#]. \)\@<=.*/ r'
   setlocal nomodifiable
   call Set_syntax()
+  call Map_keys()
 endfunction
 
 
@@ -28,7 +20,7 @@ endfunction
 
 
 function! Refresh()
-  let line_number=line('.')
+  let line_number = line('.')
   call g:Gministatus()
   execute 'normal '. line_number . 'G03l'
 endfunction
@@ -117,4 +109,17 @@ function! Set_syntax()
   hi GministatusUntracked    ctermfg=8
   hi GministatusLocalBranch  ctermfg=2
   hi GministatusRemoteBranch ctermfg=1
+endfunction
+
+
+function! Map_keys()
+  map <buffer> <silent> -    :call Stage_file()<CR>
+  map <buffer> <silent> r    :call Refresh()<CR>
+  map <buffer> <silent> R    :call Refresh()<CR>
+  map <buffer> <silent> t    :call Open_file('tabnew')<CR>
+  map <buffer> <silent> s    :call Open_file('split')<CR>
+  map <buffer> <silent> v    :call Open_file('vsplit')<CR>
+  map <buffer> <silent> o    :call Open_file('')<CR>
+  map <buffer> <silent> <CR> :call Open_file('')<CR>
+  map <buffer>          .    : <C-R>=Get_file_path()<CR><Home>
 endfunction
