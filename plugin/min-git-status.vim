@@ -47,7 +47,7 @@ function! GministatusOpenFile(cmd)
   let file_path = GministatusGetFilePath()
   wincmd w
   execute a:cmd
-  execute 'edit '. file_path
+  execute 'edit ' . GministatusGetGitTopLevel() . '/' . file_path
 endfunction
 
 
