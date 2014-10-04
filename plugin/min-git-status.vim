@@ -47,7 +47,7 @@ endfunction
 
 
 function! GministatusRunGitCommand(cmd)
-  execute 'silent !git ' . a:cmd | redraw!
+  call system('git ' . a:cmd)
 endfunction
 
 
