@@ -43,6 +43,12 @@ endfunction
 
 
 
+function! GministatusGetFile2Path()
+  return split(getline('.'))[3]
+endfunction
+
+
+
 function! GministatusOpenFile(cmd)
   let file_path = GministatusGetFilePath()
   wincmd w
@@ -61,16 +67,24 @@ endfunction
 function! GministatusStageFile()
   let line = getline('.')
   let file_path = GministatusGetFilePath()
-  if line =~ '^\(??\|[ MA]M\)'
+  if line =~ '^\(??\|[ MAR]M\)'
     call GministatusRunGitCommand('add ' . file_path)
-  elseif line =~ '^[MAD] '
+
+  elseif line =~ '^[MADR] '
     call GministatusRunGitCommand('reset -- ' . file_path)
-  elseif line =~ '^[ MA]D'
+    if line =~ '^R '
+      call GministatusRunGitCommand('reset -- ' . GministatusGetFile2Path())
+    endif
+
+  elseif line =~ '^[ MAR]D'
     call GministatusRunGitCommand('rm ' . file_path)
+
   else
     echo "Sorry, I don't know how to stage '" . file_path . "'"
     return
+
   endif
+
   call GministatusRefresh()
 endfunction
 
