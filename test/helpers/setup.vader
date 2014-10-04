@@ -1,0 +1,19 @@
+Execute (Setup):
+  call system('mkdir mock_repo')
+  cd mock_repo
+  call system('git init')
+  call system('git commit --allow-empty -m "Initial commit"')
+
+Before (Open Gministatus):
+  Gministatus
+
+After:
+  wincmd P
+  normal r
+  normal ggyG
+  pclose
+  normal ggVGp
+
+  if !exists("progress_str") | let progress_str = '' | endif
+  let progress_str .= '.'
+  echo progress_str

@@ -1,0 +1,56 @@
+Include: ./helpers/setup.vader
+
+Execute (commit a new file foo):
+  call system('echo "hello" > foo')
+  call system('git add foo')
+  call system('git commit -m "add foo"')
+
+Execute (modify file):
+  call system('echo "world" >> foo')
+
+Do (toggle stage on foo):
+  j-
+
+Expect (foo to be modified in the index):
+  ## master
+  M  foo
+
+Do (toggle stage on foo):
+  j-
+
+Expect (foo to be modified in the working tree):
+  ## master
+   M foo
+
+Do (toggle stage on foo):
+  j-
+
+Execute (modify foo in the working tree):
+  call system('echo "change" >> foo')
+
+Expect (foo to be modified in the index and working tree):
+  ## master
+  MM foo
+
+Do (toggle stage on foo):
+  j-
+
+Expect (foo to be modified in the index):
+  ## master
+  M  foo
+
+Execute (delete foo in the working tree):
+  call system('rm foo')
+
+Expect (foo to be modified in the index and deleted in the working tree):
+  ## master
+  MD foo
+
+Do (toggle stage on foo):
+  j-
+
+Expect (foo to be deleted in the index):
+  ## master
+  D  foo
+
+Include: ./helpers/cleanup.vader

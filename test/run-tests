@@ -1,0 +1,8 @@
+#!/bin/bash
+
+cd test
+
+vim -Nu <(cat <<VIMRC
+  set rtp+=vader.vim
+  set rtp+=..
+VIMRC) -c 'Vader! features/*'

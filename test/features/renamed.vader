@@ -1,0 +1,58 @@
+Include: ./helpers/setup.vader
+
+Execute (commit a new file foo):
+  call system('echo "hello" > foo')
+  call system('git add foo')
+  call system('git commit -m "add foo"')
+
+Execute (rename file to bar):
+  call system('git mv foo bar')
+
+Expect (foo to be renamed to bar):
+  ## master
+  R  foo -> bar
+
+Do (toggle stage on rename):
+  j-
+
+Expect (bar to be an untracked file and foo to be deleted):
+  ## master
+  ?? bar
+   D foo
+
+Do (toggle stage on rename):
+  j-j-
+
+Expect (foo to be renamed to bar):
+  ## master
+  R  foo -> bar
+
+Execute (make changes to bar):
+  call system('echo "world" >> bar')
+
+Expect (foo to be renamed to bar with unstaged changes in working tree):
+  ## master
+  RM foo -> bar
+
+Do (toggle stage on rename):
+  j-
+
+Expect (changes to have been staged to the renamed file):
+  ## master
+  R  foo -> bar
+
+Execute (delete bar):
+  call system('rm bar')
+
+Expect (foo to be renamed to bar with bar deleted in working tree):
+  ## master
+  RD foo -> bar
+
+Do (toggle stage on rename):
+  j-
+
+Expect (foo to be a staged deleted file):
+  ## master
+  D  foo
+
+Include: ./helpers/cleanup.vader
