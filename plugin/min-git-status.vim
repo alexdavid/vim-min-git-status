@@ -60,7 +60,7 @@ endfunction
 function! Stage_file()
   let file_path = Get_file_path()
 
-  if Current_line_has_unstaged_modification()
+  if Current_line_has_unstaged_modification() || Current_line_is_untracked()
     call Run_git_command('add ' . file_path)
 
   elseif Current_line_has_staged_changes()
@@ -80,8 +80,13 @@ function! Stage_file()
 endfunction
 
 
+function! Current_line_is_untracked()
+  return getline('.') =~ '^??'
+endfunction
+
+
 function! Current_line_has_unstaged_modification()
-  return getline('.') =~ '^\(??\|[ MAR]M\)'
+  return getline('.') =~ '^[ MAR]M'
 endfunction
 
 
