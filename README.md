@@ -1,4 +1,4 @@
-vim-min-git-status
+vim-min-git-status [![Build Status](https://travis-ci.org/alexdavid/vim-min-git-status.svg?branch=master)](https://travis-ci.org/alexdavid/vim-min-git-status)
 ==================
 
 A minimal replacement for fugitive's Gstatus command. Uses `git status --short` to render status which keeps things concise and clean.
