@@ -4,4 +4,6 @@ before_script: |
   git clone https://github.com/junegunn/vader.vim.git test/vader.vim
 
 script: |
+  git config --global user.name "Test"
+  git config --global user.email "test@example.com"
   test/run-tests

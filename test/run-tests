@@ -2,7 +2,14 @@
 
 cd test
 
-vim -Nu <(cat <<VIMRC
-  set rtp+=vader.vim
-  set rtp+=..
-VIMRC) -c 'Vader! features/*'
+fail=0
+run_test () {
+  echo "Running features/$1"
+  vim -Nnu test-vim-rc -c "Vader! features/$1.vader" > /dev/null || fail=1
+}
+
+run_test 'modified'
+run_test 'renamed'
+run_test 'untracked'
+
+exit $fail
