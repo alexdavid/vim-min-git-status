@@ -50,7 +50,7 @@ endfunction
 
 
 function! Stage_file()
-  let file_path = Get_file_path()
+  let file_path = Current_line_has_staged_rename() ? Get_file2_path() : Get_file_path()
 
   if Current_line_has_unstaged_modification() || Current_line_is_untracked()
     call Run_git_command('add ' . file_path)
@@ -58,7 +58,7 @@ function! Stage_file()
   elseif Current_line_has_staged_changes()
     call Run_git_command('reset -- ' . file_path)
     if Current_line_has_staged_rename()
-      call Run_git_command('reset -- ' . Get_file2_path())
+      call Run_git_command('reset -- ' . Get_file_path())
     endif
 
   elseif Current_line_has_unstaged_delete()
