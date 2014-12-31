@@ -17,7 +17,7 @@ Expect (foo to be added file in the index):
 Do (toggle stage on foo):
   j-
 
-Expect (foo to be added file in the index):
+Expect (foo to be untracked file):
   ## master
   ?? foo
 
