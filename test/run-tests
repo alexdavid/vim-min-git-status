@@ -11,5 +11,6 @@ run_test () {
 run_test 'modified'
 run_test 'renamed'
 run_test 'untracked'
+run_test 'unmerged_modified'
 
 exit $fail

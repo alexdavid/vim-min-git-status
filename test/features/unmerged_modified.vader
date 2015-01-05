@@ -1,0 +1,37 @@
+Include: ./helpers/setup.vader
+
+Execute (commit a new file foo):
+  call system('touch foo')
+  call system('git add foo')
+  call system('git commit -m "add foo"')
+
+Execute (create a conflict branch):
+  call system('git branch conflict')
+
+Execute (modify foo in master branch):
+  call system('echo "master" > foo')
+  call system('git add foo')
+  call system('git commit -m "modify foo"')
+
+Execute (modify foo in conflict branch):
+  call system('git checkout conflict')
+  call system('echo "conflict" > foo')
+  call system('git add foo')
+  call system('git commit -m "modify foo"')
+
+Execute (merge conflict into master):
+  call system('git checkout master')
+  call system('git merge conflict')
+
+Expect (foo to be unmerged, both modified):
+  ## master
+  UU foo
+
+Do (toggle stage on foo):
+  j-
+
+Expect (foo to be modified in the index):
+  ## master
+  M  foo
+
+Include: ./helpers/cleanup.vader

@@ -64,6 +64,9 @@ function! Stage_file()
   elseif Current_line_has_unstaged_delete()
     call Run_git_command('rm ' . file_path)
 
+  elseif Current_line_has_unmerged_modifications()
+    call Run_git_command('add '. file_path)
+
   else
     echo "Sorry, I don't know how to stage '" . file_path . "'"
     return
@@ -94,6 +97,11 @@ endfunction
 
 function! Current_line_has_staged_rename()
   return getline('.') =~ '^R'
+endfunction
+
+
+function! Current_line_has_unmerged_modifications()
+  return getline('.') =~ '^UU'
 endfunction
 
 
