@@ -22,7 +22,7 @@ endfunction
 function! Refresh()
   let line_number = line('.')
   call g:Gministatus()
-  execute 'normal '. line_number . 'G03l'
+  execute 'normal! '. line_number . 'G03l'
 endfunction
 
 
