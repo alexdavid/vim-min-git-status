@@ -6,7 +6,7 @@ function! g:Gministatus()
   setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap modifiable
   silent execute '$read !git status -b --porcelain'
   execute 'resize ' . line('$')
-  normal ggdd
+  normal! ggdd
   execute '%sort /\(^[^#]. \)\@<=.*/ r'
   setlocal nomodifiable
   call Set_syntax()
