@@ -1,0 +1,13 @@
+{
+  "name": "vim-min-git-status-tests",
+  "scripts": {
+    "test": "cucumber-js -r step_definitions -r support -f pretty"
+  },
+  "dependencies": {
+    "async": "^0.9.0",
+    "cucumber": "^0.4.8",
+    "pty.js": "^0.2.7-1",
+    "tmp": "0.0.25",
+    "vt": "^0.1.1"
+  }
+}

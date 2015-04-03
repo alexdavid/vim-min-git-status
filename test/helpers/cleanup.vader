@@ -1,3 +1,0 @@
-Execute (Cleanup):
-  cd ..
-  call system('rm -rf mock_repo')
