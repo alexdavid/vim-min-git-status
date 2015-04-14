@@ -1,7 +1,7 @@
 module.exports = ->
 
-  @When /^I run :Gministatus$/, (done) ->
-    @terminal.write ':Gministatus\n'
+  @When /^I run :([^ ]+)(?: again)?/, (vimCommand, done) ->
+    @terminal.write ":#{vimCommand}\n"
     @waitForTerminal done
 
 

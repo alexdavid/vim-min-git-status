@@ -4,6 +4,7 @@ function! g:Gministatus()
   wincmd P
   silent execute 'lcd ' . Get_git_top_level()
   setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap modifiable
+  normal! ggdG
   silent execute '$read !git status -b --porcelain'
   execute 'resize ' . line('$')
   normal! ggdd
