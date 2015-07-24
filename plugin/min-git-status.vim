@@ -40,6 +40,10 @@ endfunction
 function! Open_file(cmd)
   let file_path = Current_line_has_staged_rename() ? Get_file2_path() : Get_file_path()
   wincmd w
+  
+  " Close an existing diff if open
+  windo if &diff | quit | endif
+
   execute a:cmd
   execute 'edit ' . Get_git_top_level() . '/' . file_path
 endfunction
