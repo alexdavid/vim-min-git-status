@@ -16,3 +16,10 @@ module.exports = ->
       done Error "Terminal:\n#{@termBuffer.toString()}\n\nExpected:\n#{block}"
     else
       done()
+
+
+  @Then /^I don't see Gministatus$/, (done) ->
+    if @termBuffer.toString().indexOf('.git/mini-status') isnt -1
+      done Error "Expected Gministatus to be closed but saw:\n#{@termBuffer.toString()}"
+    else
+      done()

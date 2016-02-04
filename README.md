@@ -38,3 +38,4 @@ Open the status window with `:Gministatus`, then position cursor over files and 
 * `v` to open the file in a new vertical split
 * `s` to open the file in a new horizontal split
 * `r` or `R` to refresh
+* `q` to quit
