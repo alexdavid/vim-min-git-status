@@ -1,17 +1,14 @@
-async = require 'async'
-tmp = require 'tmp'
+tmp = require 'tmp-promise'
 
 
 module.exports = ->
 
-  @Before (done) ->
-    async.series [
-      (done) => tmp.dir (err, @path) => done err
-      @exec 'git init'
-      @startVim
-    ], done
+  @Before ->
+    @tmpDir = yield tmp.dir unsafeCleanup: yes
+    yield @exec 'git init'
+    yield @startVim()
 
 
-  @After (done) ->
+  @After ->
     @terminal.destroy()
-    done()
+    @tmpDir.cleanup()

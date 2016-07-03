@@ -1,25 +1,21 @@
 module.exports = ->
 
-  @When /^I run :([^ ]+)(?: again)?/, (vimCommand, done) ->
+  @When /^I run :([^ ]+)(?: again)?/, (vimCommand) ->
     @terminal.write ":#{vimCommand}\n"
-    @waitForTerminal done
+    yield @waitForTerminal()
 
 
-  @When /^I type "([^"]+)" to .+$/, (key, done) ->
+  @When /^I type "([^"]+)" to .+$/, (key) ->
     @terminal.write key
-    @waitForTerminal done
+    yield @waitForTerminal()
 
 
-  @Then /^I see$/, (block, done) ->
+  @Then /^I see$/, (block) ->
     block += "\n~"
     if @termBuffer.toString().indexOf(block) is -1
-      done Error "Terminal:\n#{@termBuffer.toString()}\n\nExpected:\n#{block}"
-    else
-      done()
+      throw Error "Terminal:\n#{@termBuffer.toString()}\n\nExpected:\n#{block}"
 
 
-  @Then /^I don't see Gministatus$/, (done) ->
+  @Then /^I don't see Gministatus$/, ->
     if @termBuffer.toString().indexOf('.git/mini-status') isnt -1
-      done Error "Expected Gministatus to be closed but saw:\n#{@termBuffer.toString()}"
-    else
-      done()
+      throw Error "Expected Gministatus to be closed but saw:\n#{@termBuffer.toString()}"
