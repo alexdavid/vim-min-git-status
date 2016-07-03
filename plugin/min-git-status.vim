@@ -6,12 +6,21 @@ function! g:Gministatus()
   setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap modifiable
   normal! ggdG
   silent execute '$read !git status -b --porcelain'
-  execute 'resize ' . line('$')
+  call Set_Height()
   normal! ggdd
   execute '%sort /\(^[^#]. \)\@<=.*/ r'
   setlocal nomodifiable
   call Set_syntax()
   call Map_keys()
+endfunction
+
+
+function! Set_Height()
+  if line('$') / &lines > 0.5
+    execute 'resize ' . (&lines / 2)
+  else
+    execute 'resize ' . line('$')
+  endif
 endfunction
 
 

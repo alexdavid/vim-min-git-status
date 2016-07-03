@@ -8,6 +8,11 @@ pty = require 'pty.js'
 
 class World
 
+  constructor: ->
+    @cols = 80
+    @rows = 24
+
+
   # Resolves when terminal doesn't output anything for a while
   waitForTerminal: async ->
     @terminal.on 'data', -> sawData = yes
@@ -22,15 +27,24 @@ class World
     yield if allowError then execPromise.catch(->) else execPromise
 
 
+  resize: async ({rows, cols}) ->
+    @cols = parseInt cols if cols?
+    @rows = parseInt rows if rows?
+    @termBuffer.resize @cols, @rows
+    @terminal.resize @cols, @rows
+    yield @waitForTerminal()
+
+
   startVim: async ->
-    @termBuffer = new TermBuffer 80, 24
+    @termBuffer = new TermBuffer @cols, @rows
     termWriter = new TermWriter @termBuffer
-    @terminal = pty.spawn 'vim', ['-u', path.join(__dirname, '..', 'test-vim-rc.vim')],
+    @terminal = pty.spawn 'vim', ['-u', path.join(__dirname, '..', 'test-vim-rc.vim')], {
       name: 'xterm-color'
-      cols: 80
-      rows: 24
+      @cols
+      @rows
       cwd: @tmpDir.path
       env: {}
+    }
 
     @terminal.on 'data', (data) ->
       termWriter.write data
