@@ -1,7 +1,7 @@
 {
   "name": "vim-min-git-status-tests",
   "scripts": {
-    "test": "cucumber-js -r step_definitions -r support -f pretty"
+    "test": "cucumber-js"
   },
   "dependencies": {
     "bluebird": "^3.4.1",
