@@ -49,7 +49,7 @@ endfunction
 function! Open_file(cmd)
   let file_path = Current_line_has_staged_rename() ? Get_file2_path() : Get_file_path()
   wincmd w
-  
+
   " Close an existing diff if open
   windo if &diff | quit | endif
 
@@ -60,6 +60,11 @@ endfunction
 
 function! Run_git_command(cmd)
   call system('git -C ' . Get_git_top_level() . ' ' . a:cmd)
+endfunction
+
+
+function! Run_git_command_in_terminal(cmd)
+  execute '!git -C ' . Get_git_top_level() . ' ' . a:cmd
 endfunction
 
 
@@ -86,6 +91,25 @@ function! Stage_file()
     return
   endif
   call Refresh()
+endfunction
+
+
+function! Patch_file()
+  let file_path = Get_file_path()
+
+  if Current_line_has_unstaged_modification()
+    call Run_git_command_in_terminal('add --patch ' . file_path)
+
+  elseif Current_line_is_untracked()
+    call Run_git_command('add -N ' . file_path)
+    call Run_git_command_in_terminal('add --patch ' . file_path)
+
+  elseif Current_line_has_staged_changes()
+    call Run_git_command_in_terminal('reset --patch -- ' . file_path)
+
+  else
+    echo "Sorry, I don't know how to patch '" . file_path . "'"
+  endif
 endfunction
 
 
@@ -142,6 +166,7 @@ function! Map_keys()
   map <buffer> <silent> s    :call Open_file('split')<CR>
   map <buffer> <silent> v    :call Open_file('vsplit')<CR>
   map <buffer> <silent> o    :call Open_file('')<CR>
+  map <buffer> <silent> p    :call Patch_file()<CR>
   map <buffer> <silent> q    :q<CR>
   map <buffer> <silent> cc   :Gcommit<CR>
   map <buffer>          git  : <C-R>=Get_file_path()<CR><Home>!git<space>

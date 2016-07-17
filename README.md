@@ -31,12 +31,14 @@ A minimal replacement for fugitive's Gstatus command. Uses `git status --short` 
 ## Usage
 Open the status window with `:Gministatus`, then position cursor over files and run:
 * `-` to Stage/unstage files
-  - Note: If there are changes in the index *and* working tree this will stage the file
+  * Note: If there are changes in the index *and* working tree this will stage the file
 * `.` to get the file path in vim's command line
 * `o` or `Enter` to open the file
 * `t` to open the file in a new tab
 * `v` to open the file in a new vertical split
 * `s` to open the file in a new horizontal split
+* `p` to `add --patch` or `reset --patch` the file
+  * Note: If there are changes in the index *and* working tree this will `add --patch`
 * `git` to get the file path in vim's command line prefixed by `!git`.
   * Your cursor will be between `!git` and the file path.
   * For example, to checkout a file, you can position your cursor over a changed file and just type `git` then `checkout<Enter>`

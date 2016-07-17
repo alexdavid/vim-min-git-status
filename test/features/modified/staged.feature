@@ -25,3 +25,13 @@ Feature: Working with files modified in the index
        M foo
       ~
       """
+
+
+  Scenario: Patching
+    When I type "j" to go down a line
+    And I type "p" to git reset --patch the file
+    And I wait a second
+    Then I see
+      """
+      Unstage this hunk [y,n,q,a,d,/,e,?]?
+      """

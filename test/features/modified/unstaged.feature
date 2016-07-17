@@ -24,3 +24,13 @@ Feature: Working with files modified in the working tree
       M  foo
       ~
       """
+
+
+  Scenario: Patching
+    When I type "j" to go down a line
+    And I type "p" to git add --patch the file
+    And I wait a second
+    Then I see
+      """
+      Stage this hunk [y,n,q,a,d,/,e,?]?
+      """
