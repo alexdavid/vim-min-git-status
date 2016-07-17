@@ -8,6 +8,13 @@ module.exports = ->
     yield @exec "git checkout -"
 
 
+  @Given /^I delete "([^"]+)" in "([^"]+)" branch$/, (fileName, branchName) ->
+    yield @exec "git checkout #{branchName}"
+    yield @exec "git rm #{fileName}"
+    yield @exec "git commit -m 'Remove #{fileName}'"
+    yield @exec "git checkout -"
+
+
   @Given /^I have a committed file "([^"]+)"$/, (fileName) ->
     yield @exec "echo 'Initial content for #{fileName}' > #{fileName}"
     yield @exec "git add #{fileName}"

@@ -139,7 +139,7 @@ endfunction
 
 
 function! Current_line_has_unmerged_modifications()
-  return getline('.') =~ '^UU'
+  return getline('.') =~ '^\(AA\|[UD]U\|UD\)'
 endfunction
 
 
