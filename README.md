@@ -37,6 +37,9 @@ Open the status window with `:Gministatus`, then position cursor over files and 
 * `t` to open the file in a new tab
 * `v` to open the file in a new vertical split
 * `s` to open the file in a new horizontal split
+* `git` to get the file path in vim's command line prefixed by `!git`.
+  * Your cursor will be between `!git` and the file path.
+  * For example, to checkout a file, you can position your cursor over a changed file and just type `git` then `checkout<Enter>`
 * `r` or `R` to refresh
 * `cc` to commit
 * `q` to quit
