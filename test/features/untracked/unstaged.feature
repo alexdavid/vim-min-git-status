@@ -10,6 +10,7 @@ Feature: Working with untracked files in the working tree
       """
       ## Initial commit on master
       ?? foo
+      ~
       """
 
 
@@ -20,4 +21,5 @@ Feature: Working with untracked files in the working tree
       """
       ## Initial commit on master
       A  foo
+      ~
       """

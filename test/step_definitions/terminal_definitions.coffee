@@ -15,7 +15,6 @@ module.exports = ->
 
 
   @Then /^I see$/, (block) ->
-    block += "\n~"
     if @termBuffer.toString().indexOf(block) is -1
       throw Error "Terminal:\n#{@termBuffer.toString()}\n\nExpected:\n#{block}"
 

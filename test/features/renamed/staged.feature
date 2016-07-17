@@ -13,6 +13,7 @@ Feature: Working with files renamed in the index
       """
       ## master
       R  foo -> bar
+      ~
       """
 
 
@@ -24,4 +25,5 @@ Feature: Working with files renamed in the index
       ## master
       ?? bar
        D foo
+      ~
       """

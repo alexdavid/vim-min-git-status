@@ -11,6 +11,7 @@ Feature: Working with untracked files in the index
       """
       ## Initial commit on master
       A  foo
+      ~
       """
 
 
@@ -21,4 +22,5 @@ Feature: Working with untracked files in the index
       """
       ## Initial commit on master
       ?? foo
+      ~
       """

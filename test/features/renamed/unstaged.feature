@@ -12,6 +12,7 @@ Feature: Working with files renamed in the working tree
       ## master
       ?? bar
        D foo
+      ~
       """
 
 
@@ -24,4 +25,5 @@ Feature: Working with files renamed in the working tree
       """
       ## master
       R  foo -> bar
+      ~
       """

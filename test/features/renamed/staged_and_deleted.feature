@@ -14,6 +14,7 @@ Feature: Working with files renamed in the index and deleted in the working tree
       """
       ## master
       RD foo -> bar
+      ~
       """
 
 
@@ -24,4 +25,5 @@ Feature: Working with files renamed in the index and deleted in the working tree
       """
       ## master
       D  foo
+      ~
       """

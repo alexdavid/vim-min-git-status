@@ -12,6 +12,7 @@ Feature: Working with untracked files in the index and modified in the working t
       """
       ## Initial commit on master
       AM foo
+      ~
       """
 
 
@@ -22,4 +23,5 @@ Feature: Working with untracked files in the index and modified in the working t
       """
       ## Initial commit on master
       A  foo
+      ~
       """

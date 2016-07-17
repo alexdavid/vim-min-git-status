@@ -14,6 +14,7 @@ Feature: Working with unmerged files
       """
       ## master
       UU foo
+      ~
       """
 
 
@@ -24,4 +25,5 @@ Feature: Working with unmerged files
       """
       ## master
       M  foo
+      ~
       """

@@ -14,6 +14,7 @@ Feature: Working with files renamed in the index and modified in the working tre
       """
       ## master
       RM foo -> bar
+      ~
       """
 
 
@@ -22,6 +23,7 @@ Feature: Working with files renamed in the index and modified in the working tre
       """
       ## master
       RM foo -> bar
+      ~
       """
     When I type "j" to go down a line
     And I type "-" to toggle stage
@@ -29,4 +31,5 @@ Feature: Working with files renamed in the index and modified in the working tre
       """
       ## master
       R  foo -> bar
+      ~
       """

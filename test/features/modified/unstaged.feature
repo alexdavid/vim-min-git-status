@@ -11,6 +11,7 @@ Feature: Working with files modified in the working tree
       """
       ## master
        M foo
+      ~
       """
 
 
@@ -21,4 +22,5 @@ Feature: Working with files modified in the working tree
       """
       ## master
       M  foo
+      ~
       """

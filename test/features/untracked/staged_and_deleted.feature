@@ -12,6 +12,7 @@ Feature: Working with untracked files in the index and deleted in the working tr
       """
       ## Initial commit on master
       AD foo
+      ~
       """
 
 
@@ -21,4 +22,5 @@ Feature: Working with untracked files in the index and deleted in the working tr
     Then I see
       """
       ## Initial commit on master
+      ~
       """

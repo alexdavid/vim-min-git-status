@@ -12,6 +12,7 @@ Feature: Working with files modified in the index
       """
       ## master
       M  foo
+      ~
       """
 
 
@@ -22,4 +23,5 @@ Feature: Working with files modified in the index
       """
       ## master
        M foo
+      ~
       """

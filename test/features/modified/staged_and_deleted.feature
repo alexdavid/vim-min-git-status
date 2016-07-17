@@ -13,6 +13,7 @@ Feature: Working with modified in the index and deleted in the working tree
       """
       ## master
       MD foo
+      ~
       """
 
 
@@ -23,4 +24,5 @@ Feature: Working with modified in the index and deleted in the working tree
       """
       ## master
       D  foo
+      ~
       """

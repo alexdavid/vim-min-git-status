@@ -12,4 +12,5 @@ Feature: Having Gministatus open in multiple tabs
       """
       ## Initial commit on master
       ?? foo
+      ~
       """

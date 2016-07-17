@@ -13,6 +13,7 @@ Feature: Working with files modified in the index and modified in the working tr
       """
       ## master
       MM foo
+      ~
       """
 
 
@@ -23,4 +24,5 @@ Feature: Working with files modified in the index and modified in the working tr
       """
       ## master
       M  foo
+      ~
       """
