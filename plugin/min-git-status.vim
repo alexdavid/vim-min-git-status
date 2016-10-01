@@ -37,6 +37,9 @@ endfunction
 
 
 function! Get_file_path()
+  if Current_line_is_comment()
+    return ''
+  endif
   return split(getline('.'))[1]
 endfunction
 
@@ -140,6 +143,11 @@ endfunction
 
 function! Current_line_has_unmerged_modifications()
   return getline('.') =~ '^\(AA\|[UD]U\|UD\)'
+endfunction
+
+
+function! Current_line_is_comment()
+  return getline('.') =~ '^#'
 endfunction
 
 
