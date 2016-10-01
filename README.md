@@ -29,7 +29,7 @@ A minimal replacement for fugitive's Gstatus command. Uses `git status --short` 
 | ![Gstatus](doc/Gstatus.png) | ![Gminisatatus](doc/Gministatus.png) |
 
 ## Usage
-Open the status window with `:Gministatus`, then position cursor over files and run:
+Open the status window with `:Gministatus`, then position cursor over files and type:
 * `-` to Stage/unstage files
   * Note: If there are changes in the index *and* working tree this will stage the file
 * `.` to get the file path in vim's command line
