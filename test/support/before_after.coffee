@@ -5,7 +5,7 @@ module.exports = ->
 
   @Before ->
     @tmpDir = yield tmp.dir unsafeCleanup: yes
-    yield @exec 'git init'
+    yield @execGit ['init']
     yield @startVim()
 
 

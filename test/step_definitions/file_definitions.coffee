@@ -1,21 +1,21 @@
 module.exports = ->
 
   @Given /^I have an untracked file "([^"]+)"$/, (fileName) ->
-    yield @exec "echo 'Initial content for #{fileName}' > #{fileName}"
+    yield @writeFile fileName, "Initial content for #{fileName}"
 
 
   @Given /^I have (\d+) untracked files$/, (numFiles) ->
     for i in [0..numFiles]
-      yield @exec "echo 'untracked file' > untracked_file_#{i}"
+      yield @writeFile "untracked_file_#{i}", "untracked file"
 
 
   @When /^I delete "([^"]+)"$/, (fileName) ->
-    yield @exec "rm #{fileName}"
+    yield @unlinkFile fileName
 
 
   @When /^I modify "([^"]+)"$/, (fileName) ->
-    yield @exec "echo 'modify #{fileName}' >> #{fileName}"
+    yield @appendFile fileName, "modify #{fileName}"
 
 
   @When /^I rename "([^"]+)" to "([^"]+)"$/, (fileName, newName) ->
-    yield @exec "mv #{fileName} #{newName}"
+    yield @moveFile fileName, newName
