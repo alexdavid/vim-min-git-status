@@ -52,7 +52,7 @@ function! Get_file2_path()
   return Unescape_file_name(split(getline('.'), ' -> ')[1])
 endfunction
 
-function Unescape_file_name(n)
+function! Unescape_file_name(n)
   if a:n[0] == '"'
     return a:n[1:-2]
   endif
