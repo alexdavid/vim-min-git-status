@@ -8,7 +8,7 @@ Feature: Gministatus sizes itself properly
     Given my terminal is 100 rows high
     And I have 7 untracked files
     When I run :Gministatus
-    Then Gministatus only takes up 10 lines
+    Then Gministatus only takes up 9 lines
 
 
   Scenario Outline: Gministatus takes up half of the terminal window
