@@ -84,7 +84,7 @@ endfunction
 function! Stage_file()
   let file_path = Current_line_has_staged_rename() ? Get_file2_path() : Get_file_path()
 
-  if Current_line_has_unstaged_modification() || Current_line_is_untracked()
+  if Current_line_has_unstaged_changes() || Current_line_is_untracked()
     call Run_git_command('add ' . shellescape(file_path))
 
   elseif Current_line_has_staged_changes()
@@ -110,7 +110,7 @@ endfunction
 function! Patch_file()
   let file_path = Get_file_path()
 
-  if Current_line_has_unstaged_modification()
+  if Current_line_has_unstaged_changes()
     call Run_git_command_in_terminal('add --patch ' . shellescape(file_path))
 
   elseif Current_line_is_untracked()
@@ -131,8 +131,8 @@ function! Current_line_is_untracked()
 endfunction
 
 
-function! Current_line_has_unstaged_modification()
-  return getline('.') =~ '^[ MAR]M'
+function! Current_line_has_unstaged_changes()
+  return getline('.') =~ '^\([ MAR]M\| A\)'
 endfunction
 
 
