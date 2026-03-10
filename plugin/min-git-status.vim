@@ -186,7 +186,7 @@ function! Map_keys()
   map <buffer> <silent> o    :call Open_file('')<CR>
   map <buffer> <silent> p    :call Patch_file()<CR>
   map <buffer> <silent> q    :q<CR>
-  map <buffer> <silent> cc   :Gcommit<CR>
+  map <buffer> <silent> cc   :Git commit<CR>
   map <buffer>          git  : <C-R>=Get_file_path()<CR><Home>!git<space>
   map <buffer> <silent> <CR> :call Open_file('')<CR>
   map <buffer>          .    : <C-R>=Get_file_path()<CR><Home>
