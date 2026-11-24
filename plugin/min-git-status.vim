@@ -1,21 +1,21 @@
-command! Gministatus :call g:Gministatus()
-function! g:Gministatus()
-  silent execute 'pedit ' . fnameescape(Get_git_top_level() . '/.git/mini-status')
+command! Gministatus :call s:gministatus()
+function! s:gministatus()
+  silent execute 'pedit ' . fnameescape(s:get_git_top_level() . '/.git/mini-status')
   wincmd P
-  silent execute 'lcd ' . fnameescape(Get_git_top_level())
+  silent execute 'lcd ' . fnameescape(s:get_git_top_level())
   setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap modifiable
   normal! ggdG
   silent execute '$read !git status -b --porcelain'
-  call Set_Height()
+  call s:set_height()
   normal! ggdd
   execute '%sort /\(^[^#]. \)\@<=.*/ r'
   setlocal nomodifiable
-  call Set_syntax()
-  call Map_keys()
+  call s:set_syntax()
+  call s:map_keys()
 endfunction
 
 
-function! Set_Height()
+function! s:set_height()
   if line('$') / &lines > 0.5
     execute 'resize ' . (&lines / 2)
   else
@@ -24,101 +24,101 @@ function! Set_Height()
 endfunction
 
 
-function! Get_git_top_level()
+function! s:get_git_top_level()
   return substitute(system('git rev-parse --show-toplevel'), '\n', '', '')
 endfunction
 
 
-function! Refresh()
+function! s:refresh()
   let line_number = line('.')
-  call g:Gministatus()
+  call s:gministatus()
   execute 'normal! '. line_number . 'G03l'
 endfunction
 
 
-function! Get_file_path()
-  if Current_line_is_comment()
+function! s:get_file_path()
+  if s:current_line_is_comment()
     return ''
   endif
   let line = getline('.')[3:]
-  if Current_line_has_staged_rename()
-    return Unescape_file_name(split(line, ' -> ')[0])
+  if s:current_line_has_staged_rename()
+    return s:unescape_file_name(split(line, ' -> ')[0])
   endif
-  return Unescape_file_name(line)
+  return s:unescape_file_name(line)
 endfunction
 
 
-function! Get_file2_path()
-  return Unescape_file_name(split(getline('.'), ' -> ')[1])
+function! s:get_file2_path()
+  return s:unescape_file_name(split(getline('.'), ' -> ')[1])
 endfunction
 
-function! Unescape_file_name(n)
+function! s:unescape_file_name(n)
   if a:n[0] == '"'
     return a:n[1:-2]
   endif
   return a:n
 endfunction
 
-function! Open_file(cmd)
-  let file_path = Current_line_has_staged_rename() ? Get_file2_path() : Get_file_path()
+function! s:open_file(cmd)
+  let file_path = s:current_line_has_staged_rename() ? s:get_file2_path() : s:get_file_path()
   wincmd w
 
   " Close an existing diff if open
   windo if &diff | quit | endif
 
   execute a:cmd
-  execute 'edit ' . fnameescape(Get_git_top_level() . '/' . file_path)
+  execute 'edit ' . fnameescape(s:get_git_top_level() . '/' . file_path)
 endfunction
 
 
-function! Run_git_command(args)
-  call system(join(mapnew(['git', '-C', Get_git_top_level()] + a:args, {_, v -> shellescape(v)})))
+function! s:run_git_command(args)
+  call system(join(mapnew(['git', '-C', s:get_git_top_level()] + a:args, {_, v -> shellescape(v)})))
 endfunction
 
 
-function! Run_git_command_in_terminal(args)
-  execute '!' . join(mapnew(['git', '-C', Get_git_top_level()] + a:args, {_, v -> shellescape(v, 1)}))
+function! s:run_git_command_in_terminal(args)
+  execute '!' . join(mapnew(['git', '-C', s:get_git_top_level()] + a:args, {_, v -> shellescape(v, 1)}))
 endfunction
 
 
-function! Stage_file()
-  let file_path = Current_line_has_staged_rename() ? Get_file2_path() : Get_file_path()
+function! s:stage_file()
+  let file_path = s:current_line_has_staged_rename() ? s:get_file2_path() : s:get_file_path()
 
-  if Current_line_has_unstaged_changes() || Current_line_is_untracked()
-    call Run_git_command(['add', '--', file_path])
+  if s:current_line_has_unstaged_changes() || s:current_line_is_untracked()
+    call s:run_git_command(['add', '--', file_path])
 
-  elseif Current_line_has_staged_changes()
-    call Run_git_command(['reset', '--', file_path])
-    if Current_line_has_staged_rename()
-      call Run_git_command(['reset', '--', Get_file_path()])
+  elseif s:current_line_has_staged_changes()
+    call s:run_git_command(['reset', '--', file_path])
+    if s:current_line_has_staged_rename()
+      call s:run_git_command(['reset', '--', s:get_file_path()])
     endif
 
-  elseif Current_line_has_unstaged_delete()
-    call Run_git_command(['rm', '--', file_path])
+  elseif s:current_line_has_unstaged_delete()
+    call s:run_git_command(['rm', '--', file_path])
 
-  elseif Current_line_has_unmerged_modifications()
-    call Run_git_command(['add', '--', file_path])
+  elseif s:current_line_has_unmerged_modifications()
+    call s:run_git_command(['add', '--', file_path])
 
   else
     echo "Sorry, I don't know how to stage " . shellescape(file_path)
     return
   endif
-  call Refresh()
+  call s:refresh()
 endfunction
 
 
-function! Patch_file()
-  let file_path = Get_file_path()
+function! s:patch_file()
+  let file_path = s:get_file_path()
 
-  if Current_line_has_unstaged_changes()
-    call Run_git_command_in_terminal(['add', '--patch', '--', file_path])
+  if s:current_line_has_unstaged_changes()
+    call s:run_git_command_in_terminal(['add', '--patch', '--', file_path])
 
-  elseif Current_line_is_untracked()
-    call Run_git_command(['add', '-N', '--', file_path])
-    call Run_git_command_in_terminal(['add', '--patch', '--', file_path])
+  elseif s:current_line_is_untracked()
+    call s:run_git_command(['add', '-N', '--', file_path])
+    call s:run_git_command_in_terminal(['add', '--patch', '--', file_path])
 
-  elseif Current_line_has_staged_changes()
-    call Run_git_command_in_terminal(['reset', '--patch', '--', file_path])
+  elseif s:current_line_has_staged_changes()
+    call s:run_git_command_in_terminal(['reset', '--patch', '--', file_path])
 
   else
     echo "Sorry, I don't know how to patch " . shellescape(file_path)
@@ -126,42 +126,42 @@ function! Patch_file()
 endfunction
 
 
-function! Current_line_is_untracked()
+function! s:current_line_is_untracked()
   return getline('.') =~ '^??'
 endfunction
 
 
-function! Current_line_has_unstaged_changes()
+function! s:current_line_has_unstaged_changes()
   return getline('.') =~ '^\([ MAR]M\| A\)'
 endfunction
 
 
-function! Current_line_has_unstaged_delete()
+function! s:current_line_has_unstaged_delete()
   return getline('.') =~ '^[ MAR]D'
 endfunction
 
 
-function! Current_line_has_staged_changes()
+function! s:current_line_has_staged_changes()
   return getline('.') =~ '^[MADR] '
 endfunction
 
 
-function! Current_line_has_staged_rename()
+function! s:current_line_has_staged_rename()
   return getline('.') =~ '^R'
 endfunction
 
 
-function! Current_line_has_unmerged_modifications()
+function! s:current_line_has_unmerged_modifications()
   return getline('.') =~ '^\(AA\|[UD]U\|UD\)'
 endfunction
 
 
-function! Current_line_is_comment()
+function! s:current_line_is_comment()
   return getline('.') =~ '^#'
 endfunction
 
 
-function! Set_syntax()
+function! s:set_syntax()
   syn match GministatusLocalBranch /\(^## \)\@<=[^.]*/
   syn match GministatusRemoteBranch /\(^##.*\.\.\.\)\@<=.*/
   syn match GministatusStaged /^[MADRCU]/
@@ -176,18 +176,18 @@ function! Set_syntax()
 endfunction
 
 
-function! Map_keys()
-  map <buffer> <silent> -    :call Stage_file()<CR>
-  map <buffer> <silent> r    :call Refresh()<CR>
-  map <buffer> <silent> R    :call Refresh()<CR>
-  map <buffer> <silent> t    :call Open_file('tabnew')<CR>
-  map <buffer> <silent> s    :call Open_file('split')<CR>
-  map <buffer> <silent> v    :call Open_file('vsplit')<CR>
-  map <buffer> <silent> o    :call Open_file('')<CR>
-  map <buffer> <silent> p    :call Patch_file()<CR>
+function! s:map_keys()
+  map <buffer> <silent> -    :call <SID>stage_file()<CR>
+  map <buffer> <silent> r    :call <SID>refresh()<CR>
+  map <buffer> <silent> R    :call <SID>refresh()<CR>
+  map <buffer> <silent> t    :call <SID>open_file('tabnew')<CR>
+  map <buffer> <silent> s    :call <SID>open_file('split')<CR>
+  map <buffer> <silent> v    :call <SID>open_file('vsplit')<CR>
+  map <buffer> <silent> o    :call <SID>open_file('')<CR>
+  map <buffer> <silent> p    :call <SID>patch_file()<CR>
   map <buffer> <silent> q    :q<CR>
   map <buffer> <silent> cc   :Git commit<CR>
-  map <buffer>          git  : <C-R>=shellescape(Get_file_path(), 1)<CR><Home>!git<space>
-  map <buffer> <silent> <CR> :call Open_file('')<CR>
-  map <buffer>          .    : <C-R>=fnameescape(Get_file_path())<CR><Home>
+  map <buffer>          git  : <C-R>=shellescape(<SID>get_file_path(), 1)<CR><Home>!git<space>
+  map <buffer> <silent> <CR> :call <SID>open_file('')<CR>
+  map <buffer>          .    : <C-R>=fnameescape(<SID>get_file_path())<CR><Home>
 endfunction
