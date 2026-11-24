@@ -1,8 +1,8 @@
 command! Gministatus :call g:Gministatus()
 function! g:Gministatus()
-  silent execute 'pedit ' . Get_git_top_level() . '/.git/mini-status'
+  silent execute 'pedit ' . fnameescape(Get_git_top_level() . '/.git/mini-status')
   wincmd P
-  silent execute 'lcd ' . Get_git_top_level()
+  silent execute 'lcd ' . fnameescape(Get_git_top_level())
   setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap modifiable
   normal! ggdG
   silent execute '$read !git status -b --porcelain'
@@ -71,13 +71,13 @@ function! Open_file(cmd)
 endfunction
 
 
-function! Run_git_command(cmd)
-  call system('git -C ' . shellescape(Get_git_top_level()) . ' ' . a:cmd)
+function! Run_git_command(args)
+  call system(join(mapnew(['git', '-C', Get_git_top_level()] + a:args, {_, v -> shellescape(v)})))
 endfunction
 
 
-function! Run_git_command_in_terminal(cmd)
-  execute '!git -C ' . shellescape(Get_git_top_level()) . ' ' . a:cmd
+function! Run_git_command_in_terminal(args)
+  execute '!' . join(mapnew(['git', '-C', Get_git_top_level()] + a:args, {_, v -> shellescape(v, 1)}))
 endfunction
 
 
@@ -85,19 +85,19 @@ function! Stage_file()
   let file_path = Current_line_has_staged_rename() ? Get_file2_path() : Get_file_path()
 
   if Current_line_has_unstaged_changes() || Current_line_is_untracked()
-    call Run_git_command('add ' . shellescape(file_path))
+    call Run_git_command(['add', '--', file_path])
 
   elseif Current_line_has_staged_changes()
-    call Run_git_command('reset -- ' . shellescape(file_path))
+    call Run_git_command(['reset', '--', file_path])
     if Current_line_has_staged_rename()
-      call Run_git_command('reset -- ' . shellescape(Get_file_path()))
+      call Run_git_command(['reset', '--', Get_file_path()])
     endif
 
   elseif Current_line_has_unstaged_delete()
-    call Run_git_command('rm ' . shellescape(file_path))
+    call Run_git_command(['rm', '--', file_path])
 
   elseif Current_line_has_unmerged_modifications()
-    call Run_git_command('add '. shellescape(file_path))
+    call Run_git_command(['add', '--', file_path])
 
   else
     echo "Sorry, I don't know how to stage " . shellescape(file_path)
@@ -111,14 +111,14 @@ function! Patch_file()
   let file_path = Get_file_path()
 
   if Current_line_has_unstaged_changes()
-    call Run_git_command_in_terminal('add --patch ' . shellescape(file_path))
+    call Run_git_command_in_terminal(['add', '--patch', '--', file_path])
 
   elseif Current_line_is_untracked()
-    call Run_git_command('add -N ' . file_path)
-    call Run_git_command_in_terminal('add --patch ' . shellescape(file_path))
+    call Run_git_command(['add', '-N', '--', file_path])
+    call Run_git_command_in_terminal(['add', '--patch', '--', file_path])
 
   elseif Current_line_has_staged_changes()
-    call Run_git_command_in_terminal('reset --patch -- ' . shellescape(file_path))
+    call Run_git_command_in_terminal(['reset', '--patch', '--', file_path])
 
   else
     echo "Sorry, I don't know how to patch " . shellescape(file_path)
@@ -187,7 +187,7 @@ function! Map_keys()
   map <buffer> <silent> p    :call Patch_file()<CR>
   map <buffer> <silent> q    :q<CR>
   map <buffer> <silent> cc   :Git commit<CR>
-  map <buffer>          git  : <C-R>=Get_file_path()<CR><Home>!git<space>
+  map <buffer>          git  : <C-R>=shellescape(Get_file_path(), 1)<CR><Home>!git<space>
   map <buffer> <silent> <CR> :call Open_file('')<CR>
-  map <buffer>          .    : <C-R>=Get_file_path()<CR><Home>
+  map <buffer>          .    : <C-R>=fnameescape(Get_file_path())<CR><Home>
 endfunction
