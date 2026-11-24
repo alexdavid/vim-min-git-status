@@ -177,17 +177,17 @@ endfunction
 
 
 function! s:map_keys()
-  map <buffer> <silent> -    :call <SID>stage_file()<CR>
-  map <buffer> <silent> r    :call <SID>refresh()<CR>
-  map <buffer> <silent> R    :call <SID>refresh()<CR>
-  map <buffer> <silent> t    :call <SID>open_file('tabnew')<CR>
-  map <buffer> <silent> s    :call <SID>open_file('split')<CR>
-  map <buffer> <silent> v    :call <SID>open_file('vsplit')<CR>
-  map <buffer> <silent> o    :call <SID>open_file('')<CR>
-  map <buffer> <silent> p    :call <SID>patch_file()<CR>
-  map <buffer> <silent> q    :q<CR>
-  map <buffer> <silent> cc   :Git commit<CR>
-  map <buffer>          git  : <C-R>=shellescape(<SID>get_file_path(), 1)<CR><Home>!git<space>
-  map <buffer> <silent> <CR> :call <SID>open_file('')<CR>
-  map <buffer>          .    : <C-R>=fnameescape(<SID>get_file_path())<CR><Home>
+  nnoremap <buffer> <silent> -    :call <SID>stage_file()<CR>
+  nnoremap <buffer> <silent> r    :call <SID>refresh()<CR>
+  nnoremap <buffer> <silent> R    :call <SID>refresh()<CR>
+  nnoremap <buffer> <silent> t    :call <SID>open_file('tabnew')<CR>
+  nnoremap <buffer> <silent> s    :call <SID>open_file('split')<CR>
+  nnoremap <buffer> <silent> v    :call <SID>open_file('vsplit')<CR>
+  nnoremap <buffer> <silent> o    :call <SID>open_file('')<CR>
+  nnoremap <buffer> <silent> p    :call <SID>patch_file()<CR>
+  nnoremap <buffer> <silent> q    :q<CR>
+  nnoremap <buffer> <silent> cc   :Git commit<CR>
+  nnoremap <buffer>          git  : <C-R>=shellescape(<SID>get_file_path(), 1)<CR><Home>!git<space>
+  nnoremap <buffer> <silent> <CR> :call <SID>open_file('')<CR>
+  nnoremap <buffer>          .    : <C-R>=fnameescape(<SID>get_file_path())<CR><Home>
 endfunction
